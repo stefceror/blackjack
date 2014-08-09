@@ -19,9 +19,11 @@ class window.Game extends Backbone.Model
     dealerScore = (@get 'dealerHand').scores()
     dealerScore = @handleAce(dealerScore)
 
+    console.log "End Game"
     console.log playerScore
     console.log dealerScore
     console.log @pickWinner playerScore, dealerScore
+    @pickWinner playerScore, dealerScore
 
   handleAce: (score) ->
       if score.length is 2
@@ -36,6 +38,7 @@ class window.Game extends Backbone.Model
       when dealerScore > 21 then 'player'
       when playerScore > dealerScore then 'player'
       when dealerScore > playerScore then 'dealer'
+      else 'tie'
 
   dealerTurn: ->
     (@get 'dealerHand').at(0).flip()

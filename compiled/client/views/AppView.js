@@ -10,10 +10,21 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<div class="game-div"></div>');
+    AppView.prototype.template = _.template('<button class="playAgain">Play Again</button> <div class="game-div"></div>');
+
+    AppView.prototype.events = {
+      "click .playAgain": function() {
+        return this.model.playAgain();
+      }
+    };
 
     AppView.prototype.initialize = function() {
-      return this.render();
+      this.render();
+      return this.model.on('change', (function(_this) {
+        return function() {
+          return _this.render();
+        };
+      })(this));
     };
 
     AppView.prototype.render = function() {

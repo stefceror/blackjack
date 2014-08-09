@@ -24,9 +24,11 @@
       playerScore = this.handleAce(playerScore);
       dealerScore = (this.get('dealerHand')).scores();
       dealerScore = this.handleAce(dealerScore);
+      console.log("End Game");
       console.log(playerScore);
       console.log(dealerScore);
-      return console.log(this.pickWinner(playerScore, dealerScore));
+      console.log(this.pickWinner(playerScore, dealerScore));
+      return this.pickWinner(playerScore, dealerScore);
     };
 
     Game.prototype.handleAce = function(score) {
@@ -55,6 +57,8 @@
             return 'player';
           case !(dealerScore > playerScore):
             return 'dealer';
+          default:
+            return 'tie';
         }
       })();
     };

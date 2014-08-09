@@ -6,4 +6,5 @@ class window.App extends Backbone.Model
     @set 'game', game = new Game('deck': deck)
     #rules
 
-
+  playAgain: ->
+    @set 'game', game = new Game('deck': @get('deck'))

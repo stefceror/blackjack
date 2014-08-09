@@ -18,6 +18,13 @@
       }));
     };
 
+    App.prototype.playAgain = function() {
+      var game;
+      return this.set('game', game = new Game({
+        'deck': this.get('deck')
+      }));
+    };
+
     return App;
 
   })(Backbone.Model);
