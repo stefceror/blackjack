@@ -10,7 +10,7 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<button class="playAgain">Play Again</button> <div class="game-div"></div>');
+    AppView.prototype.template = _.template('<button class="playAgain">Play Again</button> <div class="game-div"></div> <div class="playerScore">Your Wins: <%= playerWins %></div> <div class="dealerScore">Dealer Wins: <%= dealerWins %></div>');
 
     AppView.prototype.events = {
       "click .playAgain": function() {
@@ -29,7 +29,7 @@
 
     AppView.prototype.render = function() {
       this.$el.children().detach();
-      this.$el.html(this.template());
+      this.$el.html(this.template(this.model.attributes));
       return this.$('.game-div').html(new GameView({
         model: this.model.get('game')
       }).el);

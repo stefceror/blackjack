@@ -24,7 +24,6 @@
     };
 
     HandView.prototype.render = function() {
-      var _base;
       this.$el.children().detach();
       this.$el.html(this.template(this.collection));
       this.$el.append(this.collection.map(function(card) {
@@ -32,7 +31,7 @@
           model: card
         }).$el;
       }));
-      return this.$('.score').text("" + (this.collection.scores()[0]) + "/" + (typeof (_base = this.collection.scores())[1] === "function" ? _base[1](this.collection.scores()[1]) : void 0));
+      return this.$('.score').text("" + (this.collection.scores()[0]));
     };
 
     return HandView;

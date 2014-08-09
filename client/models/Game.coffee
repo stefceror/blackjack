@@ -7,6 +7,7 @@ class window.Game extends Backbone.Model
 
     #listen for a 'stand' event from the player
     @listenTo (@get 'playerHand'), 'stand', @dealerTurn
+    @listenTo (@get 'dealerHand'), 'stand', @endGame
     #Compare the player's hand value to dealer's hand value to determine winner according to the rules of blackjack
 
     @listenTo (@get 'playerHand'), 'bust', @endGame
@@ -19,11 +20,8 @@ class window.Game extends Backbone.Model
     dealerScore = (@get 'dealerHand').scores()
     dealerScore = @handleAce(dealerScore)
 
-    console.log "End Game"
-    console.log playerScore
-    console.log dealerScore
-    console.log @pickWinner playerScore, dealerScore
-    @pickWinner playerScore, dealerScore
+    winner = @pickWinner playerScore, dealerScore
+    @trigger winner
 
   handleAce: (score) ->
       if score.length is 2
@@ -43,4 +41,5 @@ class window.Game extends Backbone.Model
   dealerTurn: ->
     (@get 'dealerHand').at(0).flip()
     (@get 'dealerHand').hit() until (@handleAce (@get 'dealerHand').scores()) >= 17
-    @endGame()
+    if (@get 'dealerHand').scores()[0] <= 21
+      @endGame.apply(@)

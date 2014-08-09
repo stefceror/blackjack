@@ -13,16 +13,35 @@
     App.prototype.initialize = function() {
       var deck, game;
       this.set('deck', deck = new Deck());
-      return this.set('game', game = new Game({
+      this.set('game', game = new Game({
         'deck': deck
       }));
+      this.set('dealerWins', 0);
+      this.set('playerWins', 0);
+      this.listenTo(this.get('game'), 'player', this.playerWin);
+      return this.listenTo(this.get('game'), 'dealer', this.dealerWin);
     };
 
     App.prototype.playAgain = function() {
-      var game;
-      return this.set('game', game = new Game({
+      var deck, game;
+      if ((this.get('deck')).length < 8) {
+        this.set('deck', deck = new Deck());
+      }
+      this.set('game', game = new Game({
         'deck': this.get('deck')
       }));
+      this.listenTo(this.get('game'), 'player', this.playerWin);
+      return this.listenTo(this.get('game'), 'dealer', this.dealerWin);
+    };
+
+    App.prototype.playerWin = function() {
+      var wins;
+      return this.set('playerWins', wins = (this.get('playerWins')) + 1);
+    };
+
+    App.prototype.dealerWin = function() {
+      var wins;
+      return this.set('dealerWins', wins = (this.get('dealerWins')) + 1);
     };
 
     return App;

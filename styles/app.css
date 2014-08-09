@@ -1,3 +1,6 @@
+body {
+  background-color: DarkGreen;
+}
 .card {
   float: left;
   border: solid 1px black;
@@ -20,4 +23,77 @@ img{
 
 .hand {
   overflow: auto;
+}
+
+.player-hand-container {
+  position: absolute;
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 600px;
+}
+
+.dealer-hand-container {
+  position: absolute;
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 100px;
+}
+
+.hit-button {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 50px;
+  left: 0;
+  right: 0;
+  top: 850px;
+}
+
+.stand-button {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 50px;
+  left: -300px;
+  right: 0;
+  top: 850px;
+}
+
+.playerScore {
+  font-weight: bold;
+  position: absolute;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 1000px;
+  right: 0;
+  top: 750px;
+}
+
+.dealerScore {
+  font-weight: bold;
+  position: absolute;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 1000px;
+  right: 0;
+  top: 225px;
+}
+
+.playAgain {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  left: 25px;
+  right: 0;
+  top: 25px;
 }

@@ -14,21 +14,19 @@
       this.set('playerHand', params.deck.dealPlayer());
       this.set('dealerHand', params.deck.dealDealer());
       this.listenTo(this.get('playerHand'), 'stand', this.dealerTurn);
+      this.listenTo(this.get('dealerHand'), 'stand', this.endGame);
       this.listenTo(this.get('playerHand'), 'bust', this.endGame);
       return this.listenTo(this.get('dealerHand'), 'bust', this.endGame);
     };
 
     Game.prototype.endGame = function() {
-      var dealerScore, playerScore;
+      var dealerScore, playerScore, winner;
       playerScore = (this.get('playerHand')).scores();
       playerScore = this.handleAce(playerScore);
       dealerScore = (this.get('dealerHand')).scores();
       dealerScore = this.handleAce(dealerScore);
-      console.log("End Game");
-      console.log(playerScore);
-      console.log(dealerScore);
-      console.log(this.pickWinner(playerScore, dealerScore));
-      return this.pickWinner(playerScore, dealerScore);
+      winner = this.pickWinner(playerScore, dealerScore);
+      return this.trigger(winner);
     };
 
     Game.prototype.handleAce = function(score) {
@@ -68,7 +66,9 @@
       while (!((this.handleAce((this.get('dealerHand')).scores())) >= 17)) {
         (this.get('dealerHand')).hit();
       }
-      return this.endGame();
+      if ((this.get('dealerHand')).scores()[0] <= 21) {
+        return this.endGame.apply(this);
+      }
     };
 
     return Game;
