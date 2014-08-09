@@ -13,30 +13,32 @@
     Game.prototype.initialize = function(params) {
       this.set('playerHand', params.deck.dealPlayer());
       this.set('dealerHand', params.deck.dealDealer());
-      return this.listenTo(this.get('playerHand'), 'stand', this.endGame);
+      this.listenTo(this.get('playerHand'), 'stand', this.dealerTurn);
+      this.listenTo(this.get('playerHand'), 'bust', this.endGame);
+      return this.listenTo(this.get('dealerHand'), 'bust', this.endGame);
     };
 
     Game.prototype.endGame = function() {
-      var dealerScore, handleAce, playerScore;
-      handleAce = function(score) {
-        if (score.length === 2) {
-          if (score[1] > 21) {
-            return score[0];
-          } else {
-            return score[1];
-          }
-        } else {
-          return score;
-        }
-      };
+      var dealerScore, playerScore;
       playerScore = (this.get('playerHand')).scores();
-      playerScore = handleAce(playerScore);
-      (this.get('dealerHand')).at(0).flip();
+      playerScore = this.handleAce(playerScore);
       dealerScore = (this.get('dealerHand')).scores();
-      dealerScore = handleAce(dealerScore);
+      dealerScore = this.handleAce(dealerScore);
       console.log(playerScore);
       console.log(dealerScore);
       return console.log(this.pickWinner(playerScore, dealerScore));
+    };
+
+    Game.prototype.handleAce = function(score) {
+      if (score.length === 2) {
+        if (score[1] > 21) {
+          return score[0];
+        } else {
+          return score[1];
+        }
+      } else {
+        return score;
+      }
     };
 
     Game.prototype.pickWinner = function(playerScore, dealerScore) {
@@ -55,6 +57,14 @@
             return 'dealer';
         }
       })();
+    };
+
+    Game.prototype.dealerTurn = function() {
+      (this.get('dealerHand')).at(0).flip();
+      while (!((this.handleAce((this.get('dealerHand')).scores())) >= 17)) {
+        (this.get('dealerHand')).hit();
+      }
+      return this.endGame();
     };
 
     return Game;

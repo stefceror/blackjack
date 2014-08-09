@@ -6,38 +6,38 @@ class window.Game extends Backbone.Model
     @set 'dealerHand', params.deck.dealDealer()
 
     #listen for a 'stand' event from the player
-    @listenTo (@get 'playerHand'), 'stand', @endGame
+    @listenTo (@get 'playerHand'), 'stand', @dealerTurn
     #Compare the player's hand value to dealer's hand value to determine winner according to the rules of blackjack
+
+    @listenTo (@get 'playerHand'), 'bust', @endGame
+    @listenTo (@get 'dealerHand'), 'bust', @endGame
 
   # Define endGame
   endGame: ->
-    handleAce = (score) ->
-      if score.length is 2
-        if score[1] > 21 then score[0]
-        else score[1]
-      else score
-
     playerScore = (@get 'playerHand').scores()
-    playerScore = handleAce(playerScore)
-    (@get 'dealerHand').at(0).flip()
+    playerScore = @handleAce(playerScore)
     dealerScore = (@get 'dealerHand').scores()
-    dealerScore = handleAce(dealerScore)
+    dealerScore = @handleAce(dealerScore)
 
     console.log playerScore
     console.log dealerScore
     console.log @pickWinner playerScore, dealerScore
 
-  pickWinner: (playerScore, dealerScore) ->
-    #if score over 21, loss
-    #if playerScore > 21 and dealerScore > 21 then 'loss'
-    #if playerScore > dealerScore, player
-    #else if playerScore > dealerScore then 'player'
-    #if dealerScore > playerScore, dealer
-    #else if dealerScore > playerScore then 'dealer'
+  handleAce: (score) ->
+      if score.length is 2
+        if score[1] > 21 then score[0]
+        else score[1]
+      else score
 
+  pickWinner: (playerScore, dealerScore) ->
     winner = switch
       when playerScore > 21 and dealerScore > 21 then 'loss'
       when playerScore > 21 then 'dealer'
       when dealerScore > 21 then 'player'
       when playerScore > dealerScore then 'player'
       when dealerScore > playerScore then 'dealer'
+
+  dealerTurn: ->
+    (@get 'dealerHand').at(0).flip()
+    (@get 'dealerHand').hit() until (@handleAce (@get 'dealerHand').scores()) >= 17
+    @endGame()
